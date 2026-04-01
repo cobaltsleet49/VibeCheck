@@ -1,0 +1,24 @@
+{
+    "name": "vibecheck/backend",
+    "description": "VibeCheck PHP Backend API",
+    "type": "project",
+    "require": {
+        "php": "^8.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "VibeCheck\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "VibeCheck\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    }
+}

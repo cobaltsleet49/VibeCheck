@@ -1,0 +1,60 @@
+version: "3.9"
+
+services:
+  # ---- MySQL database ----
+  db:
+    image: mysql:8.0
+    container_name: vibecheck_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootsecret
+      MYSQL_DATABASE: vibecheck
+      MYSQL_USER: vibecheck
+      MYSQL_PASSWORD: secret
+    volumes:
+      - db_data:/var/lib/mysql
+      - ../database/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+      - ../database/seeds.sql:/docker-entrypoint-initdb.d/02_seeds.sql:ro
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "vibecheck", "-psecret"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ---- PHP backend ----
+  backend:
+    build:
+      context: ../backend
+      dockerfile: ../devops/Dockerfile.backend
+    container_name: vibecheck_backend
+    restart: unless-stopped
+    environment:
+      DB_HOST: db
+      DB_PORT: "3306"
+      DB_NAME: vibecheck
+      DB_USER: vibecheck
+      DB_PASSWORD: secret
+    volumes:
+      - ../backend:/var/www/html
+    ports:
+      - "8080:80"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # ---- React frontend ----
+  frontend:
+    build:
+      context: ..
+      dockerfile: devops/Dockerfile.frontend
+    container_name: vibecheck_frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+volumes:
+  db_data:
