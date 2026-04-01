@@ -1,0 +1,37 @@
+# ---- Stage 1: install PHP dependencies ----
+FROM composer:2 AS deps
+
+WORKDIR /app
+COPY composer.json ./
+RUN composer install --no-dev --optimize-autoloader --no-interaction
+
+# ---- Stage 2: runtime image ----
+FROM php:8.3-apache
+
+# Install PDO MySQL extension
+RUN docker-php-ext-install pdo pdo_mysql
+
+# Enable Apache mod_rewrite for clean URLs
+RUN a2enmod rewrite
+
+# Set document root to /var/www/html/public
+ENV APACHE_DOCUMENT_ROOT /var/www/html/public
+
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' \
+        /etc/apache2/sites-available/000-default.conf \
+    && sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' \
+        /etc/apache2/apache2.conf \
+        /etc/apache2/conf-available/*.conf
+
+# Allow .htaccess overrides
+RUN sed -i 's/AllowOverride None/AllowOverride All/' \
+        /etc/apache2/apache2.conf
+
+WORKDIR /var/www/html
+
+COPY --from=deps /app/vendor ./vendor
+COPY . .
+
+RUN chown -R www-data:www-data /var/www/html
+
+EXPOSE 80
