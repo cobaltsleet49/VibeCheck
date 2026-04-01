@@ -37,6 +37,7 @@ npm run dev        # http://localhost:5173
 ```bash
 cd backend
 composer install
+cp .env.example .env
 php -S localhost:8080 -t public
 ```
 
@@ -52,5 +53,9 @@ mysql -u root -p < database/seeds.sql   # optional sample data
 | Method | Path | Description |
 |--------|------|-------------|
 | `GET` | `/api/health` | Health check |
-| `GET` | `/api/vibes` | List recent vibes |
-| `POST` | `/api/vibes` | Post a new vibe |
+| `GET` | `/api/users` | List users |
+| `POST` | `/api/users` | Create user |
+| `GET` | `/api/events` | List events |
+| `POST` | `/api/events` | Create event |
+| `GET` | `/api/registrations` | List event registrations |
+| `POST` | `/api/registrations` | Create event registration |

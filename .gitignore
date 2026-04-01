@@ -6,6 +6,8 @@ vendor/
 .env
 .env.*
 *.env
+!.env.example
+!*.env.example
 
 # Database
 *.sql
