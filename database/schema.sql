@@ -22,6 +22,8 @@ CREATE TABLE IF NOT EXISTS events (
     start_time          TIMESTAMP    NOT NULL,
     end_time            TIMESTAMP    NOT NULL,
     location            VARCHAR(255),
+    latitude            DECIMAL(10,8),
+    longitude           DECIMAL(11,8),
     capacity            INT,
     created_at          TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     registration_type   VARCHAR(50),

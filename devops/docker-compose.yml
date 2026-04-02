@@ -36,6 +36,7 @@ services:
       DB_NAME: vibecheck
       DB_USER: vibecheck
       DB_PASSWORD: secret
+      POSITIONSTACK_API_KEY: ${POSITIONSTACK_API_KEY:-}
     # volumes:
     #   - ../backend:/var/www/html
     ports:

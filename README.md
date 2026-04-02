@@ -53,6 +53,9 @@ cp .env.example .env
 php -S localhost:8080 -t public
 ```
 
+Backend environment variable:
+- `POSITIONSTACK_API_KEY` (for address geocoding to latitude/longitude)
+
 ### Database
 Apply the schema once a MySQL server is running:
 ```bash

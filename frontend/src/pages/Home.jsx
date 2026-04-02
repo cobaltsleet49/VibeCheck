@@ -13,7 +13,7 @@ function Home({ user, onLogout }) {
         <p className="brand">VibeCheck</p>
         <nav className="nav-links">
           <button type="button" onClick={() => navigate('/my-events')}>My Events</button>
-          <button type="button" className="primary-action">Browse Events</button>
+          <button type="button" className="primary-action" onClick={() => navigate('/browse-events')}>Browse Events</button>
           <button type="button" className="secondary-action" onClick={onLogout}>Sign out</button>
         </nav>
       </header>
