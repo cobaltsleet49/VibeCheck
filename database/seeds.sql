@@ -4,6 +4,10 @@ DELETE FROM event_registrations;
 DELETE FROM events;
 DELETE FROM users;
 
+ALTER TABLE event_registrations AUTO_INCREMENT = 1;
+ALTER TABLE events AUTO_INCREMENT = 1;
+ALTER TABLE users AUTO_INCREMENT = 1;
+
 
 INSERT INTO users (name, email) VALUES
     ('Alice Johnson', 'alice@example.com'),

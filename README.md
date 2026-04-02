@@ -24,6 +24,12 @@ docker compose up --build
 | Backend API | http://localhost:8080/api |
 | MySQL | localhost:3306 |
 
+## Prerequisites (Local Development)
+
+- Node.js: https://nodejs.org/en/download
+- Composer: https://getcomposer.org/download/
+- PHP: https://www.php.net/downloads.php
+
 ## Development
 
 ### Frontend
@@ -59,6 +65,7 @@ Backend environment variable:
 ### Database
 Apply the schema once a MySQL server is running:
 ```bash
+cd ..
 mysql -u root -p < database/schema.sql
 mysql -u root -p < database/seeds.sql
 ```
