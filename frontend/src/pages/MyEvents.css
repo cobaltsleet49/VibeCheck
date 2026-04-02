@@ -1,0 +1,131 @@
+.events-success-message {
+  margin: 0;
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(15, 118, 110, 0.2);
+  border-radius: 12px;
+  background: rgba(15, 118, 110, 0.12);
+  color: #0f766e;
+  font: 600 0.92rem/1.4 'Sora', sans-serif;
+}
+
+.events-nav-left {
+  display: flex;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.tab-button.active {
+  border-color: #0f766e;
+  background: rgba(15, 118, 110, 0.12);
+  color: #0f766e;
+}
+
+.events-content {
+  margin-top: 1.35rem;
+  flex: 1;
+}
+
+.events-panel {
+  border: 1px solid rgba(16, 32, 47, 0.1);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.76);
+  box-shadow: 0 12px 24px rgba(10, 28, 43, 0.06);
+  padding: 1.2rem;
+}
+
+.events-panel h2 {
+  margin: 0;
+  color: #10202f;
+  font: 700 1.3rem/1.2 'Sora', sans-serif;
+}
+
+.events-panel p {
+  margin: 0.65rem 0 0;
+  color: #5b7084;
+  font: 400 0.95rem/1.6 'Sora', sans-serif;
+}
+
+.events-empty {
+  margin: 0.75rem 0 0;
+  color: #5b7084;
+  font: 400 0.95rem/1.6 'Sora', sans-serif;
+}
+
+.events-list {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.event-card {
+  border: 1px solid rgba(16, 32, 47, 0.1);
+  border-radius: 14px;
+  padding: 1rem 1.05rem;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 8px 18px rgba(10, 28, 43, 0.06);
+}
+
+.event-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.event-card h3 {
+  margin: 0;
+  color: #10202f;
+  font: 700 1.05rem/1.3 'Sora', sans-serif;
+}
+
+.event-card p {
+  margin: 0.45rem 0 0;
+  color: #456177;
+  font: 400 0.92rem/1.55 'Sora', sans-serif;
+}
+
+.event-card-actions {
+  display: flex;
+  gap: 0.55rem;
+  flex-shrink: 0;
+}
+
+.event-card-action {
+  border: 1px solid rgba(16, 32, 47, 0.14);
+  border-radius: 10px;
+  padding: 0.48rem 0.75rem;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.9);
+  color: #10202f;
+  font: 600 0.8rem/1 'Sora', sans-serif;
+  transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+}
+
+.event-card-action:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 14px rgba(16, 78, 145, 0.12);
+}
+
+.event-card-action.danger {
+  border-color: rgba(180, 35, 24, 0.22);
+  color: #b42318;
+  background: rgba(180, 35, 24, 0.08);
+}
+
+.event-card dl {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0.85rem 0 0;
+}
+
+.event-card dt {
+  color: #0f766e;
+  font: 700 0.75rem/1.2 'IBM Plex Mono', monospace;
+  text-transform: uppercase;
+}
+
+.event-card dd {
+  margin: 0.2rem 0 0;
+  color: #10202f;
+  font: 500 0.9rem/1.45 'Sora', sans-serif;
+}

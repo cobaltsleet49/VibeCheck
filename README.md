@@ -30,7 +30,19 @@ docker compose up --build
 ```bash
 cd frontend
 npm install
-npm run dev        # http://localhost:5173
+cp .env.example .env
+npm run dev        # Defaults to http://localhost:5173
+```
+
+Frontend environment variables:
+- `VITE_AUTH0_DOMAIN`
+- `VITE_AUTH0_CLIENT_ID`
+- `VITE_AUTH0_AUDIENCE` (optional)
+
+### Frontend Build
+```bash
+cd frontend
+npm run build
 ```
 
 ### Backend
@@ -45,17 +57,20 @@ php -S localhost:8080 -t public
 Apply the schema once a MySQL server is running:
 ```bash
 mysql -u root -p < database/schema.sql
-mysql -u root -p < database/seeds.sql   # optional sample data
+mysql -u root -p < database/seeds.sql
 ```
 
 ## API Endpoints
 
 | Method | Path | Description |
 |--------|------|-------------|
-| `GET` | `/api/health` | Health check |
 | `GET` | `/api/users` | List users |
 | `POST` | `/api/users` | Create user |
 | `GET` | `/api/events` | List events |
 | `POST` | `/api/events` | Create event |
+| `PUT` | `/api/events/:id` | Update event |
+| `DELETE` | `/api/events/:id` | Delete event |
 | `GET` | `/api/registrations` | List event registrations |
 | `POST` | `/api/registrations` | Create event registration |
+| `GET` | `/api/registrations/:id` | Get registration by id |
+| `DELETE` | `/api/registrations/:id` | Delete registration |

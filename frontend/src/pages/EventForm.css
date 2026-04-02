@@ -1,0 +1,104 @@
+.event-form-page {
+  min-height: 100vh;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: clamp(1.25rem, 4vw, 3rem);
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.event-form-header {
+  border: 1px solid rgba(16, 32, 47, 0.12);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: 0 10px 20px rgba(10, 28, 43, 0.08);
+  padding: 1rem 1.1rem;
+}
+
+.event-form-header h1 {
+  margin: 0;
+  color: #10202f;
+  font: 700 1.5rem/1.2 'Sora', sans-serif;
+}
+
+.event-form-header p {
+  margin: 0.5rem 0 0;
+  color: #4d667b;
+  font: 400 0.95rem/1.5 'Sora', sans-serif;
+}
+
+.event-form {
+  border: 1px solid rgba(16, 32, 47, 0.12);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 12px 22px rgba(10, 28, 43, 0.08);
+  padding: 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.event-form label {
+  color: #1f3749;
+  font: 600 0.84rem/1.2 'Sora', sans-serif;
+}
+
+.event-form input,
+.event-form select,
+.event-form textarea {
+  width: 100%;
+  border: 1px solid rgba(16, 32, 47, 0.2);
+  border-radius: 10px;
+  padding: 0.68rem 0.75rem;
+  color: #10202f;
+  background: rgba(255, 255, 255, 0.92);
+  font: 400 0.9rem/1.35 'Sora', sans-serif;
+}
+
+.event-form textarea {
+  resize: vertical;
+  min-height: 96px;
+}
+
+.event-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.9rem;
+}
+
+.event-form-grid > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.event-form-message {
+  margin: 0.35rem 0 0;
+  font: 500 0.87rem/1.35 'IBM Plex Mono', monospace;
+}
+
+.event-form-message.success {
+  color: #0f766e;
+}
+
+.event-form-message.error {
+  color: #b42318;
+}
+
+.event-form-actions {
+  margin-top: 0.6rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.7rem;
+}
+
+@media (max-width: 920px) {
+  .event-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .event-form-actions {
+    flex-direction: column;
+  }
+}

@@ -39,6 +39,42 @@ class User
         return $fetched->fetch();
     }
 
+    public static function findOrCreateByEmail(string $name, string $email): int
+    {
+        $pdo = Database::connection();
+
+        $findByEmail = $pdo->prepare(
+            'SELECT user_id FROM users WHERE email = :email LIMIT 1'
+        );
+        $findByEmail->execute([':email' => $email]);
+        $existingByEmail = $findByEmail->fetch();
+        if ($existingByEmail !== false) {
+            $userId = (int) $existingByEmail['user_id'];
+            $update = $pdo->prepare(
+                'UPDATE users
+                 SET name = :name
+                 WHERE user_id = :user_id'
+            );
+            $update->execute([
+                ':name' => $name,
+                ':user_id' => $userId,
+            ]);
+
+            return $userId;
+        }
+
+        $insert = $pdo->prepare(
+            'INSERT INTO users (name, email)
+             VALUES (:name, :email)'
+        );
+        $insert->execute([
+            ':name' => $name,
+            ':email' => $email,
+        ]);
+
+        return (int) $pdo->lastInsertId();
+    }
+
     public static function find(int $userId): array|false
     {
         $pdo = Database::connection();
