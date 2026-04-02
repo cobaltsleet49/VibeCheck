@@ -1,111 +1,90 @@
-/* VibeCheck App Styles */
-
-.app {
-  max-width: 720px;
-  margin: 0 auto;
-  padding: 24px 20px 48px;
-  font-family: system-ui, -apple-system, sans-serif;
+.login-panel {
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(16, 32, 47, 0.12);
+  border-radius: 22px;
+  padding: clamp(1.4rem, 3vw, 2.2rem);
+  box-shadow: 0 24px 50px rgba(10, 28, 43, 0.16);
+  backdrop-filter: blur(7px);
+  animation: reveal-up 700ms ease 120ms both;
 }
 
-.app-header {
-  text-align: center;
-  margin-bottom: 32px;
-}
-
-.app-header h1 {
-  font-size: 2.4rem;
-  margin: 0 0 8px;
-}
-
-.app-subtitle {
-  color: #666;
-  font-size: 1.1rem;
+.login-panel h2 {
   margin: 0;
+  font: 700 clamp(1.4rem, 2.2vw, 2rem)/1.1 'Sora', sans-serif;
+  color: #10202f;
 }
 
-/* Vibe picker */
-.vibe-picker {
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 24px;
-  margin-bottom: 32px;
-  box-shadow: 0 2px 8px rgba(0,0,0,.06);
+.login-subtitle {
+  margin: 0.4rem 0 1.1rem;
+  color: #5b7084;
+  font: 400 0.94rem/1.5 'Sora', sans-serif;
 }
 
-.vibe-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
-@media (max-width: 480px) {
-  .vibe-grid { grid-template-columns: repeat(2, 1fr); }
-}
-
-.vibe-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  padding: 16px 8px;
-  border: 2px solid #e5e7eb;
-  border-radius: 10px;
-  background: #fafafa;
-  cursor: pointer;
-  font-size: 0.85rem;
-  transition: border-color 0.15s, background 0.15s;
-}
-
-.vibe-btn span:first-child { font-size: 1.8rem; }
-
-.vibe-btn:hover { border-color: #a5b4fc; background: #f5f3ff; }
-.vibe-btn.selected { border-color: #6366f1; background: #eef2ff; font-weight: 600; }
-
-.submit-btn {
+.login-actions button {
+  margin-top: 0.5rem;
   width: 100%;
-  padding: 12px;
-  background: #6366f1;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
+  border: 0;
+  border-radius: 12px;
+  padding: 0.9rem 1rem;
   cursor: pointer;
-  transition: background 0.15s;
+  color: #f8fdff;
+  background: linear-gradient(135deg, #0f766e 0%, #1d4ed8 100%);
+  font: 600 0.96rem/1 'Sora', sans-serif;
+  transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
 }
 
-.submit-btn:hover:not(:disabled) { background: #4f46e5; }
-.submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
-.feedback { margin-top: 12px; font-size: 0.9rem; }
-.feedback.success { color: #16a34a; }
-.feedback.error   { color: #dc2626; }
-
-/* Vibe feed */
-.vibe-feed h2 {
-  font-size: 1.2rem;
-  margin: 0 0 16px;
+.login-actions button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 22px rgba(16, 78, 145, 0.3);
+  filter: brightness(1.05);
 }
 
-.vibe-card {
+.login-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.login-message {
+  margin-top: 0.4rem;
+  font: 500 0.88rem/1.35 'IBM Plex Mono', monospace;
+}
+
+.login-message.success {
+  color: #0f766e;
+}
+
+.login-message.error {
+  color: #b42318;
+}
+
+.user-card {
+  margin-top: 0.8rem;
+  margin-bottom: 0.4rem;
+  padding: 0.8rem;
+  border: 1px solid #c7d5e1;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.72);
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 14px 16px;
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  margin-bottom: 10px;
-  box-shadow: 0 1px 4px rgba(0,0,0,.04);
+  gap: 0.8rem;
 }
 
-.vibe-emoji { font-size: 2rem; }
+.user-card img {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 2px solid #d8e2ea;
+}
 
-.vibe-info { display: flex; flex-direction: column; gap: 2px; }
-.vibe-info strong { font-size: 1rem; }
-.vibe-meta { font-size: 0.8rem; color: #9ca3af; }
+.user-name {
+  margin: 0;
+  color: #10202f;
+  font: 600 0.95rem/1.2 'Sora', sans-serif;
+}
 
-.empty { color: #9ca3af; font-size: 0.95rem; }
+.user-email {
+  margin: 0.2rem 0 0;
+  color: #5a6f83;
+  font: 500 0.77rem/1.2 'IBM Plex Mono', monospace;
+}
 

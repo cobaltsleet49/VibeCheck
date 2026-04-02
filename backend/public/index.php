@@ -71,6 +71,9 @@ $routes = [
         '/api/events' => 'VibeCheck\\Controllers\\EventController@store',
         '/api/registrations' => 'VibeCheck\\Controllers\\EventRegistrationController@store',
     ],
+    'PUT' => [
+        '/api/events/{id}' => 'VibeCheck\\Controllers\\EventController@update',
+    ],
     'DELETE' => [
         '/api/users/{id}' => 'VibeCheck\\Controllers\\UserController@destroy',
         '/api/events/{id}' => 'VibeCheck\\Controllers\\EventController@destroy',
@@ -102,6 +105,13 @@ if ($handler === null && $requestMethod === 'DELETE') {
         $routeParams[] = (int) $matches[1];
     } elseif (preg_match('#^/api/registrations/(\d+)$#', $requestUri, $matches) === 1) {
         $handler = 'VibeCheck\\Controllers\\EventRegistrationController@destroy';
+        $routeParams[] = (int) $matches[1];
+    }
+}
+
+if ($handler === null && $requestMethod === 'PUT') {
+    if (preg_match('#^/api/events/(\d+)$#', $requestUri, $matches) === 1) {
+        $handler = 'VibeCheck\\Controllers\\EventController@update';
         $routeParams[] = (int) $matches[1];
     }
 }
