@@ -29,8 +29,8 @@ INSERT INTO events (
         '2026-04-15 21:00:00',
         'Engineering Building Room 210',
         80,
-        'Open',
-        'Tech'
+        'Public',
+        'Study Group'
     ),
     (
         2,
@@ -40,8 +40,8 @@ INSERT INTO events (
         '2026-04-20 19:30:00',
         'South Lawn',
         40,
-        'Approval',
-        'Wellness'
+        'RSVP',
+        'Mixer'
     );
 
 INSERT INTO event_registrations (user_id, event_id, status) VALUES

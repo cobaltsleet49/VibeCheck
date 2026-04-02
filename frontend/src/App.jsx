@@ -1,5 +1,6 @@
 import { useAuth0 } from '@auth0/auth0-react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import BrowseEvents from './pages/BrowseEvents.jsx'
 import EventForm from './pages/EventForm.jsx'
 import Home from './pages/Home.jsx'
 import Login from './pages/Login.jsx'
@@ -34,6 +35,7 @@ function App() {
             }
           />
           <Route path="/my-events" element={<MyEvents />} />
+          <Route path="/browse-events" element={<BrowseEvents />} />
           <Route path="/events/new" element={<EventForm />} />
           <Route path="/events/edit/:eventId" element={<EventForm />} />
           <Route path="*" element={<Navigate to="/home" replace />} />

@@ -12,7 +12,7 @@ class Event
         $pdo = Database::connection();
         $stmt = $pdo->query(
             'SELECT e.event_id, e.creator_id, u.name AS creator_name, u.email AS creator_email, e.title, e.description,
-                    e.start_time, e.end_time, e.location, e.capacity, e.created_at,
+                    e.start_time, e.end_time, e.location, e.latitude, e.longitude, e.capacity, e.created_at,
                     e.registration_type, e.event_type
              FROM events e
              JOIN users u ON u.user_id = e.creator_id
@@ -28,19 +28,21 @@ class Event
         string $description,
         string $startTime,
         string $endTime,
-        ?string $location,
-        ?int $capacity,
-        ?string $registrationType,
-        ?string $eventType
+        string $location,
+        ?float $latitude,
+        ?float $longitude,
+        int $capacity,
+        string $registrationType,
+        string $eventType
     ): array {
         $pdo = Database::connection();
         $stmt = $pdo->prepare(
             'INSERT INTO events (
                 creator_id, title, description, start_time, end_time,
-                location, capacity, registration_type, event_type
+                location, latitude, longitude, capacity, registration_type, event_type
              ) VALUES (
                 :creator_id, :title, :description, :start_time, :end_time,
-                :location, :capacity, :registration_type, :event_type
+                :location, :latitude, :longitude, :capacity, :registration_type, :event_type
              )'
         );
 
@@ -51,6 +53,8 @@ class Event
             ':start_time' => $startTime,
             ':end_time' => $endTime,
             ':location' => $location,
+            ':latitude' => $latitude,
+            ':longitude' => $longitude,
             ':capacity' => $capacity,
             ':registration_type' => $registrationType,
             ':event_type' => $eventType,
@@ -59,7 +63,7 @@ class Event
         $id = (int) $pdo->lastInsertId();
         $fetched = $pdo->prepare(
             'SELECT e.event_id, e.creator_id, u.name AS creator_name, u.email AS creator_email, e.title, e.description, e.start_time, e.end_time,
-                e.location, e.capacity, e.created_at, e.registration_type, e.event_type
+                e.location, e.latitude, e.longitude, e.capacity, e.created_at, e.registration_type, e.event_type
              FROM events e
              JOIN users u ON u.user_id = e.creator_id
              WHERE e.event_id = :event_id'
@@ -74,7 +78,7 @@ class Event
         $pdo = Database::connection();
         $stmt = $pdo->prepare(
             'SELECT e.event_id, e.creator_id, u.name AS creator_name, u.email AS creator_email, e.title, e.description,
-                    e.start_time, e.end_time, e.location, e.capacity, e.created_at,
+                    e.start_time, e.end_time, e.location, e.latitude, e.longitude, e.capacity, e.created_at,
                     e.registration_type, e.event_type
              FROM events e
              JOIN users u ON u.user_id = e.creator_id
@@ -93,6 +97,8 @@ class Event
         string $startTime,
         string $endTime,
         string $location,
+        ?float $latitude,
+        ?float $longitude,
         int $capacity,
         string $registrationType,
         string $eventType
@@ -106,6 +112,8 @@ class Event
                  start_time = :start_time,
                  end_time = :end_time,
                  location = :location,
+                 latitude = :latitude,
+                 longitude = :longitude,
                  capacity = :capacity,
                  registration_type = :registration_type,
                  event_type = :event_type
@@ -119,6 +127,8 @@ class Event
             ':start_time' => $startTime,
             ':end_time' => $endTime,
             ':location' => $location,
+            ':latitude' => $latitude,
+            ':longitude' => $longitude,
             ':capacity' => $capacity,
             ':registration_type' => $registrationType,
             ':event_type' => $eventType,

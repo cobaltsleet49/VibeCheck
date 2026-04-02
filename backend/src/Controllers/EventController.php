@@ -5,6 +5,7 @@ namespace VibeCheck\Controllers;
 
 use VibeCheck\Models\Event;
 use VibeCheck\Models\User;
+use VibeCheck\Services\GeocodingService;
 
 class EventController
 {
@@ -59,6 +60,7 @@ class EventController
         }
 
         $creatorId = User::findOrCreateByEmail($creatorName, $creatorEmail);
+        $coordinates = GeocodingService::geocode($location);
 
         return Event::create(
             $creatorId,
@@ -67,6 +69,8 @@ class EventController
             $startTime,
             $endTime,
             $location,
+            $coordinates['latitude'] ?? null,
+            $coordinates['longitude'] ?? null,
             $capacity,
             $registrationType,
             $eventType
@@ -108,6 +112,7 @@ class EventController
         }
 
         $creatorId = User::findOrCreateByEmail($creatorName, $creatorEmail);
+        $coordinates = GeocodingService::geocode($location);
         $updated = Event::update(
             $eventId,
             $creatorId,
@@ -116,6 +121,8 @@ class EventController
             $startTime,
             $endTime,
             $location,
+            $coordinates['latitude'] ?? null,
+            $coordinates['longitude'] ?? null,
             $capacity,
             $registrationType,
             $eventType
