@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace VibeCheck\Controllers;
 
 use VibeCheck\Models\EventRegistration;
+use Throwable;
 
 class EventRegistrationController
 {
@@ -36,7 +37,31 @@ class EventRegistrationController
             return ['error' => 'user_id, event_id, and status are required'];
         }
 
-        return EventRegistration::create($userId, $eventId, $status);
+        try {
+            return EventRegistration::create($userId, $eventId, $status);
+        } catch (Throwable $throwable) {
+            http_response_code(500);
+            return ['error' => 'Unable to process registration request'];
+        }
+    }
+
+    public function update(int $regId): array
+    {
+        $body = json_decode(file_get_contents('php://input'), true) ?? [];
+        $status = trim($body['status'] ?? '');
+
+        if ($status === '') {
+            http_response_code(422);
+            return ['error' => 'status is required'];
+        }
+
+        $updatedRegistration = EventRegistration::updateStatus($regId, $status);
+        if ($updatedRegistration === false) {
+            http_response_code(404);
+            return ['error' => 'Registration not found'];
+        }
+
+        return $updatedRegistration;
     }
 
     public function destroy(int $regId): array

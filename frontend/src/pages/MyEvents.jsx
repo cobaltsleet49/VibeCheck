@@ -13,6 +13,9 @@ function MyEvents() {
   const [createdEvents, setCreatedEvents] = useState([])
   const [createdEventsLoading, setCreatedEventsLoading] = useState(false)
   const [createdEventsError, setCreatedEventsError] = useState('')
+  const [registeredEvents, setRegisteredEvents] = useState([])
+  const [registeredEventsLoading, setRegisteredEventsLoading] = useState(false)
+  const [registeredEventsError, setRegisteredEventsError] = useState('')
 
   useEffect(() => {
     const routedMessage = location.state?.successMessage
@@ -58,6 +61,74 @@ function MyEvents() {
     loadCreatedEvents()
   }, [activeTab, user?.email])
 
+  useEffect(() => {
+    async function loadRegisteredEvents() {
+      if (activeTab !== 'registered') {
+        return
+      }
+
+      const userEmail = String(user?.email ?? '').toLowerCase().trim()
+      if (!userEmail) {
+        setRegisteredEvents([])
+        setRegisteredEventsError('Missing email identity.')
+        return
+      }
+
+      setRegisteredEventsLoading(true)
+      setRegisteredEventsError('')
+
+      try {
+        const [usersResponse, registrationsResponse, eventsResponse] = await Promise.all([
+          fetch('/api/users'),
+          fetch('/api/registrations'),
+          fetch('/api/events'),
+        ])
+
+        const [usersData, registrationsData, eventsData] = await Promise.all([
+          usersResponse.json(),
+          registrationsResponse.json(),
+          eventsResponse.json(),
+        ])
+
+        if (!usersResponse.ok || !registrationsResponse.ok || !eventsResponse.ok) {
+          throw new Error('Unable to load registration data.')
+        }
+
+        const users = Array.isArray(usersData) ? usersData : []
+        const registrations = Array.isArray(registrationsData) ? registrationsData : []
+        const events = Array.isArray(eventsData) ? eventsData : []
+
+        const currentUser = users.find(
+          (candidate) => String(candidate.email ?? '').toLowerCase().trim() === userEmail,
+        )
+
+        if (!currentUser?.user_id) {
+          setRegisteredEvents([])
+          setRegisteredEventsError('No user record found for your account yet.')
+          return
+        }
+
+        const eventsById = new Map(events.map((event) => [event.event_id, event]))
+
+        const mergedRegisteredEvents = registrations
+          .filter((registration) => Number(registration.user_id) === Number(currentUser.user_id))
+          .map((registration) => ({
+            ...registration,
+            event: eventsById.get(registration.event_id) ?? null,
+          }))
+
+        setRegisteredEvents(mergedRegisteredEvents)
+      } catch {
+        setRegisteredEvents([])
+        setRegisteredEventsError('Unable to load your event registrations.')
+      } finally {
+        setRegisteredEventsLoading(false)
+      }
+    }
+
+    loadRegisteredEvents()
+  }, [activeTab, user?.email])
+
   async function handleDelete(eventId) {
     const shouldDelete = window.confirm('Delete this event?')
     if (!shouldDelete) {
@@ -84,6 +155,80 @@ function MyEvents() {
     }
   }
 
+  async function handleCancelRegistration(registrationId) {
+    const shouldCancel = window.confirm('Cancel this registration?')
+    if (!shouldCancel) {
+      return
+    }
+
+    try {
+      const response = await fetch(`/api/registrations/${registrationId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: 'cancelled' }),
+      })
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data?.error ?? 'Unable to cancel registration.')
+      }
+
+      setRegisteredEvents((previousRegistrations) =>
+        previousRegistrations.map((registration) =>
+          registration.reg_id === registrationId
+            ? { ...registration, status: data?.status ?? 'cancelled' }
+            : registration,
+        ),
+      )
+      setRegisteredEventsError('')
+      setSuccessMessage('Registration cancelled successfully!')
+    } catch {
+      setRegisteredEventsError('Unable to cancel your registration right now.')
+    }
+  }
+
+  function registrationStatusClass(status) {
+    const normalizedStatus = String(status ?? '').toLowerCase().trim()
+
+    if (normalizedStatus === 'registered' || normalizedStatus === 'confirmed' || normalizedStatus === 'approved') {
+      return 'status-registered'
+    }
+
+    if (normalizedStatus === 'pending' || normalizedStatus === 'waitlisted') {
+      return 'status-pending'
+    }
+
+    if (normalizedStatus === 'denied' || normalizedStatus === 'cancelled' || normalizedStatus === 'rejected') {
+      return 'status-denied'
+    }
+
+    if (normalizedStatus === 'failed') {
+      return 'status-failed'
+    }
+
+    return 'status-unknown'
+  }
+
+  function registrationStatusLabel(status) {
+    const normalizedStatus = String(status ?? '').toLowerCase().trim()
+
+    if (normalizedStatus === 'confirmed' || normalizedStatus === 'approved') {
+      return 'registered'
+    }
+
+    if (normalizedStatus === 'rejected') {
+      return 'denied'
+    }
+
+    if (normalizedStatus === 'cancelled') {
+      return 'cancelled'
+    }
+
+    return normalizedStatus || 'unknown'
+  }
+
   const createdEventsView = useMemo(() => {
     if (createdEventsLoading) {
       return <p className="events-empty">Loading your created events...</p>
@@ -107,6 +252,13 @@ function MyEvents() {
                 <p>{event.description}</p>
               </div>
               <div className="event-card-actions">
+                <button
+                  type="button"
+                  className="event-card-action"
+                  onClick={() => navigate(`/events/${event.event_id}/registrations`, { state: { event } })}
+                >
+                  View Registrations
+                </button>
                 <button
                   type="button"
                   className="event-card-action"
@@ -147,6 +299,83 @@ function MyEvents() {
     )
   }, [createdEvents, createdEventsError, createdEventsLoading])
 
+  const registeredEventsView = useMemo(() => {
+    if (registeredEventsLoading) {
+      return <p className="events-empty">Loading your event registrations...</p>
+    }
+
+    if (registeredEventsError) {
+      return <p className="events-empty">{registeredEventsError}</p>
+    }
+
+    if (registeredEvents.length === 0) {
+      return <p className="events-empty">You have not registered for any events yet.</p>
+    }
+
+    return (
+      <div className="events-list">
+        {registeredEvents.map((registration) => {
+          const event = registration.event
+
+          return (
+            <article key={registration.reg_id} className="event-card">
+              <div className="event-card-header">
+                <div>
+                  <h3>{event?.title ?? registration.event_title ?? 'Untitled Event'}</h3>
+                  <p>{event?.description ?? 'No description available.'}</p>
+                </div>
+
+                <div className="event-card-actions">
+                  <div className="registration-status-wrap">
+                    <span
+                      className={`registration-status-icon ${registrationStatusClass(registration.status)}`}
+                      aria-hidden="true"
+                    />
+                    <span className="registration-status-label">{registrationStatusLabel(registration.status)}</span>
+                  </div>
+                  {['pending', 'waitlisted', 'registered', 'confirmed', 'approved'].includes(
+                    String(registration.status ?? '').toLowerCase().trim(),
+                  ) && (
+                    <button
+                      type="button"
+                      className="event-card-action danger"
+                      onClick={() => handleCancelRegistration(registration.reg_id)}
+                    >
+                      Cancel
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              <dl>
+                <div>
+                  <dt>When</dt>
+                  <dd>
+                    {event?.start_time && event?.end_time
+                      ? `${new Date(event.start_time).toLocaleString()} - ${new Date(event.end_time).toLocaleString()}`
+                      : 'Time unavailable'}
+                  </dd>
+                </div>
+                <div>
+                  <dt>Location</dt>
+                  <dd>{event?.location ?? 'Location unavailable'}</dd>
+                </div>
+                <div>
+                  <dt>Access</dt>
+                  <dd>{event?.registration_type ?? 'N/A'}</dd>
+                </div>
+                <div>
+                  <dt>Type</dt>
+                  <dd>{event?.event_type ?? 'N/A'}</dd>
+                </div>
+              </dl>
+            </article>
+          )
+        })}
+      </div>
+    )
+  }, [registeredEvents, registeredEventsError, registeredEventsLoading])
+
   function handleBack() {
     navigate('/home')
   }
@@ -175,13 +404,23 @@ function MyEvents() {
           </button>
         </div>
 
-        <button
-          type="button"
-          className="create-event-button"
-          onClick={() => navigate('/events/new')}
-        >
-          Create Event
-        </button>
+        <div className="events-nav-right">
+          <button
+            type="button"
+            className="secondary-action"
+            onClick={() => navigate('/browse-events')}
+          >
+            Browse Events
+          </button>
+
+          <button
+            type="button"
+            className="create-event-button"
+            onClick={() => navigate('/events/new')}
+          >
+            Create Event
+          </button>
+        </div>
       </header>
 
       {successMessage && (
@@ -199,7 +438,7 @@ function MyEvents() {
         ) : (
           <div className="events-panel">
             <h2>Events Registered</h2>
-            <p>You are not registered for any events yet.</p>
+            {registeredEventsView}
           </div>
         )}
       </section>

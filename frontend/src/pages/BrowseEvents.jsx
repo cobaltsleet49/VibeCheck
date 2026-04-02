@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useAuth0 } from '@auth0/auth0-react'
 import { useNavigate } from 'react-router-dom'
 import './BrowseEvents.css'
 
@@ -9,6 +10,7 @@ const MAX_RELIABLE_DISTANCE_MILES = 5758.9
 
 function BrowseEvents() {
   const navigate = useNavigate()
+  const { user } = useAuth0()
   const [events, setEvents] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
@@ -18,6 +20,11 @@ function BrowseEvents() {
   const [accessLevelFilter, setAccessLevelFilter] = useState('All')
   const [userCoords, setUserCoords] = useState(null)
   const [locationStatus, setLocationStatus] = useState('')
+  const [currentUserId, setCurrentUserId] = useState(null)
+  const [registeredEventIds, setRegisteredEventIds] = useState([])
+  const [signingUpEventId, setSigningUpEventId] = useState(null)
+  const [successMessage, setSuccessMessage] = useState('')
+  const [actionErrorMessage, setActionErrorMessage] = useState('')
 
   function haversineMiles(latitude1, longitude1, latitude2, longitude2) {
     const toRadians = (degrees) => (degrees * Math.PI) / 180
@@ -76,9 +83,65 @@ function BrowseEvents() {
     loadEvents()
   }, [])
 
+  useEffect(() => {
+    async function loadUserRegistrationContext() {
+      const userEmail = String(user?.email ?? '').toLowerCase().trim()
+      if (!userEmail) {
+        setCurrentUserId(null)
+        setRegisteredEventIds([])
+        return
+      }
+
+      try {
+        const [usersResponse, registrationsResponse] = await Promise.all([
+          fetch(`${API_BASE}/users`),
+          fetch(`${API_BASE}/registrations`),
+        ])
+
+        const [usersData, registrationsData] = await Promise.all([
+          usersResponse.json(),
+          registrationsResponse.json(),
+        ])
+
+        if (!usersResponse.ok || !registrationsResponse.ok) {
+          throw new Error('Unable to load user filter data.')
+        }
+
+        const users = Array.isArray(usersData) ? usersData : []
+        const registrations = Array.isArray(registrationsData) ? registrationsData : []
+        const currentUser = users.find(
+          (candidate) => String(candidate.email ?? '').toLowerCase().trim() === userEmail,
+        )
+
+        if (!currentUser?.user_id) {
+          setCurrentUserId(null)
+          setRegisteredEventIds([])
+          return
+        }
+
+        const eventIds = registrations
+          .filter((registration) => Number(registration.user_id) === Number(currentUser.user_id))
+          .filter((registration) => {
+            const normalizedStatus = String(registration.status ?? '').toLowerCase().trim()
+            return ['pending', 'waitlisted', 'registered', 'confirmed', 'approved'].includes(normalizedStatus)
+          })
+          .map((registration) => Number(registration.event_id))
+
+        setCurrentUserId(Number(currentUser.user_id))
+        setRegisteredEventIds(eventIds)
+      } catch {
+        setCurrentUserId(null)
+        setRegisteredEventIds([])
+      }
+    }
+
+    loadUserRegistrationContext()
+  }, [user?.email])
+
   const filteredEvents = useMemo(() => {
     const normalizedKeyword = keyword.trim().toLowerCase()
     const radiusValue = Number(radiusMiles)
+    const registeredEventIdSet = new Set(registeredEventIds)
 
     const eventsWithDistance = events.map((event) => {
       const eventLatitude = Number(event.latitude)
@@ -155,7 +218,124 @@ function BrowseEvents() {
 
         return Number(event.distance_miles) <= radiusValue
       })
-  }, [accessLevelFilter, eventTypeFilter, events, keyword, radiusMiles, userCoords])
+      .filter((event) => {
+        if (currentUserId == null) {
+          return true
+        }
+
+        return Number(event.creator_id) !== Number(currentUserId)
+      })
+      .filter((event) => {
+        return !registeredEventIdSet.has(Number(event.event_id))
+      })
+  }, [
+    accessLevelFilter,
+    currentUserId,
+    eventTypeFilter,
+    events,
+    keyword,
+    radiusMiles,
+    registeredEventIds,
+    userCoords,
+  ])
+
+  async function ensureCurrentUserId() {
+    if (currentUserId != null) {
+      return currentUserId
+    }
+
+    const userEmail = String(user?.email ?? '').toLowerCase().trim()
+    if (!userEmail) {
+      throw new Error('Missing account email.')
+    }
+
+    const usersResponse = await fetch(`${API_BASE}/users`)
+    const usersData = await usersResponse.json()
+    const users = Array.isArray(usersData) ? usersData : []
+
+    if (!usersResponse.ok) {
+      throw new Error('Unable to load user profile.')
+    }
+
+    const existingUser = users.find(
+      (candidate) => String(candidate.email ?? '').toLowerCase().trim() === userEmail,
+    )
+
+    if (existingUser?.user_id) {
+      const resolvedUserId = Number(existingUser.user_id)
+      setCurrentUserId(resolvedUserId)
+      return resolvedUserId
+    }
+
+    const fallbackName = String(user?.name ?? user?.nickname ?? userEmail.split('@')[0] ?? 'User').trim()
+    const createdUserResponse = await fetch(`${API_BASE}/users`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: fallbackName || 'User',
+        email: userEmail,
+      }),
+    })
+
+    const createdUserData = await createdUserResponse.json()
+    if (!createdUserResponse.ok || !createdUserData?.user_id) {
+      throw new Error(createdUserData?.error ?? 'Unable to create your user profile.')
+    }
+
+    const resolvedUserId = Number(createdUserData.user_id)
+    setCurrentUserId(resolvedUserId)
+
+    return resolvedUserId
+  }
+
+  async function handleSignUp(event) {
+    setSuccessMessage('')
+    setActionErrorMessage('')
+    setSigningUpEventId(event.event_id)
+
+    try {
+      const userId = await ensureCurrentUserId()
+      const isPublicEvent = String(event?.registration_type ?? '').toLowerCase().trim() === 'public'
+      const registrationStatus = isPublicEvent ? 'registered' : 'pending'
+      const response = await fetch(`${API_BASE}/registrations`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id: userId,
+          event_id: event.event_id,
+          status: registrationStatus,
+        }),
+      })
+
+      const data = await response.json()
+      if (!response.ok) {
+        throw new Error(data?.error ?? 'Unable to sign up for this event.')
+      }
+
+      setRegisteredEventIds((previousIds) => {
+        if (previousIds.includes(Number(event.event_id))) {
+          return previousIds
+        }
+
+        return [...previousIds, Number(event.event_id)]
+      })
+      setSuccessMessage(
+        isPublicEvent ? 'Successfully registered for the event!' : 'Registration submitted for approval!',
+      )
+    } catch (registrationError) {
+      setActionErrorMessage(
+        registrationError instanceof Error
+          ? registrationError.message
+          : 'Unable to sign up for this event right now.',
+      )
+    } finally {
+      setSigningUpEventId(null)
+    }
+  }
 
   return (
     <div className="browse-events-page">
@@ -225,9 +405,21 @@ function BrowseEvents() {
             </select>
           </div>
         </div>
+
       </section>
 
       <section className="browse-results" aria-label="Browse event results">
+        {successMessage && (
+          <p className="events-success-message" role="status">
+            {successMessage}
+          </p>
+        )}
+        {actionErrorMessage && (
+          <p className="events-error-message" role="alert">
+            {actionErrorMessage}
+          </p>
+        )}
+
         {isLoading && <p className="events-empty">Loading events...</p>}
         {!isLoading && error && <p className="events-empty">{error}</p>}
         {!isLoading && !error && filteredEvents.length === 0 && (
@@ -238,7 +430,17 @@ function BrowseEvents() {
           <div className="events-list">
             {filteredEvents.map((event) => (
               <article key={event.event_id} className="event-card">
-                <h3>{event.title}</h3>
+                <div className="browse-event-header">
+                  <h3>{event.title}</h3>
+                  <button
+                    type="button"
+                    className="browse-sign-up-button"
+                    onClick={() => handleSignUp(event)}
+                    disabled={signingUpEventId === event.event_id}
+                  >
+                    {signingUpEventId === event.event_id ? 'Signing Up...' : 'Sign Up'}
+                  </button>
+                </div>
                 <p>{event.description}</p>
                 <dl>
                   <div>

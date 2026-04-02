@@ -28,7 +28,10 @@ class EventRegistration
         $pdo = Database::connection();
         $stmt = $pdo->prepare(
             'INSERT INTO event_registrations (user_id, event_id, status)
-             VALUES (:user_id, :event_id, :status)'
+             VALUES (:user_id, :event_id, :status)
+             ON DUPLICATE KEY UPDATE
+                status = VALUES(status),
+                registration_time = CURRENT_TIMESTAMP'
         );
         $stmt->execute([
             ':user_id' => $userId,
@@ -36,15 +39,34 @@ class EventRegistration
             ':status' => $status,
         ]);
 
-        $id = (int) $pdo->lastInsertId();
         $fetched = $pdo->prepare(
             'SELECT reg_id, user_id, event_id, registration_time, status
              FROM event_registrations
-             WHERE reg_id = :reg_id'
+             WHERE user_id = :user_id AND event_id = :event_id
+             LIMIT 1'
         );
-        $fetched->execute([':reg_id' => $id]);
+        $fetched->execute([
+            ':user_id' => $userId,
+            ':event_id' => $eventId,
+        ]);
 
         return $fetched->fetch();
+    }
+
+    public static function updateStatus(int $regId, string $status): array|false
+    {
+        $pdo = Database::connection();
+        $stmt = $pdo->prepare(
+            'UPDATE event_registrations
+             SET status = :status
+             WHERE reg_id = :reg_id'
+        );
+        $stmt->execute([
+            ':status' => $status,
+            ':reg_id' => $regId,
+        ]);
+
+        return self::find($regId);
     }
 
     public static function find(int $regId): array|false
