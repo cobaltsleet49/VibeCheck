@@ -5,6 +5,7 @@ import EventForm from './pages/EventForm.jsx'
 import Home from './pages/Home.jsx'
 import Login from './pages/Login.jsx'
 import MyEvents from './pages/MyEvents.jsx'
+import ViewRegistrations from './pages/ViewRegistrations.jsx'
 
 function App() {
   const { user, isAuthenticated, isLoading, logout } = useAuth0()
@@ -35,6 +36,7 @@ function App() {
             }
           />
           <Route path="/my-events" element={<MyEvents />} />
+          <Route path="/events/:eventId/registrations" element={<ViewRegistrations />} />
           <Route path="/browse-events" element={<BrowseEvents />} />
           <Route path="/events/new" element={<EventForm />} />
           <Route path="/events/edit/:eventId" element={<EventForm />} />

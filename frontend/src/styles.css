@@ -124,11 +124,11 @@
 .primary-action,
 .create-event-button {
   border: 0;
-  border-radius: 12px;
+  border-radius: 10px;
   cursor: pointer;
   color: #f8fdff;
   background: linear-gradient(135deg, #0f766e 0%, #1d4ed8 100%);
-  font: 600 0.92rem/1 'Sora', sans-serif;
+  font: 600 0.84rem/1 'Sora', sans-serif;
   transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
 }
 
@@ -137,15 +137,15 @@
 }
 
 .create-event-button {
-  padding: 0.78rem 1rem;
+  padding: 0.62rem 0.9rem;
 }
 
 .secondary-action {
   border: 1px solid rgba(16, 32, 47, 0.14);
-  border-radius: 12px;
-  padding: 0.9rem 1.1rem;
+  border-radius: 10px;
+  padding: 0.62rem 0.9rem;
   cursor: pointer;
-  font: 600 0.96rem/1 'Sora', sans-serif;
+  font: 600 0.84rem/1 'Sora', sans-serif;
   color: #10202f;
   background: rgba(255, 255, 255, 0.7);
   transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;

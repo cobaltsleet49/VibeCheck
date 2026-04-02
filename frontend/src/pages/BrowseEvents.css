@@ -80,6 +80,55 @@
   margin-top: 0.2rem;
 }
 
+.events-success-message {
+  margin: 0 0 0.75rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(15, 118, 110, 0.2);
+  border-radius: 12px;
+  background: rgba(15, 118, 110, 0.12);
+  color: #0f766e;
+  font: 600 0.92rem/1.4 'Sora', sans-serif;
+}
+
+.events-error-message {
+  margin: 0 0 0.75rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(180, 35, 24, 0.22);
+  border-radius: 12px;
+  background: rgba(180, 35, 24, 0.08);
+  color: #b42318;
+  font: 600 0.92rem/1.4 'Sora', sans-serif;
+}
+
+.browse-event-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.9rem;
+}
+
+.browse-sign-up-button {
+  border: 1px solid rgba(15, 118, 110, 0.24);
+  border-radius: 10px;
+  padding: 0.48rem 0.75rem;
+  cursor: pointer;
+  background: rgba(15, 118, 110, 0.1);
+  color: #0f766e;
+  font: 600 0.82rem/1 'Sora', sans-serif;
+  white-space: nowrap;
+  transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+}
+
+.browse-sign-up-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 14px rgba(16, 78, 145, 0.12);
+}
+
+.browse-sign-up-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
 @media (max-width: 920px) {
   .browse-filters {
     grid-template-columns: 1fr;
