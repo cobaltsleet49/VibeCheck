@@ -38,6 +38,25 @@ class UserController
         return User::create($name, $email);
     }
 
+    public function update(int $userId): array
+    {
+        $body = json_decode(file_get_contents('php://input'), true) ?? [];
+        $name = trim($body['name'] ?? '');
+
+        if ($name === '') {
+            http_response_code(422);
+            return ['error' => 'name is required'];
+        }
+
+        $updatedUser = User::updateName($userId, $name);
+        if ($updatedUser === false) {
+            http_response_code(404);
+            return ['error' => 'User not found'];
+        }
+
+        return $updatedUser;
+    }
+
     public function destroy(int $userId): array
     {
         if (!User::delete($userId)) {

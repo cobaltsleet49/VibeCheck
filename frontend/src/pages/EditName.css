@@ -1,0 +1,102 @@
+.edit-name-page {
+  min-height: 100vh;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: clamp(1.25rem, 4vw, 3rem);
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.edit-name-top-card,
+.edit-name-form-card {
+  border: 1px solid rgba(16, 32, 47, 0.12);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 12px 24px rgba(10, 28, 43, 0.06);
+}
+
+.edit-name-top-card {
+  padding: 0.95rem 1.05rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.9rem;
+}
+
+.edit-name-top-left {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.edit-name-top-card .brand {
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
+  margin: 0;
+  color: #10202f;
+  font: 700 1.05rem/1.2 'Sora', sans-serif;
+}
+
+.edit-name-form-card {
+  padding: 1.15rem;
+}
+
+.edit-name-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.72rem;
+}
+
+.edit-name-form label {
+  color: #1f3749;
+  font: 600 0.84rem/1.2 'Sora', sans-serif;
+}
+
+.edit-name-form input {
+  width: 100%;
+  border: 1px solid rgba(16, 32, 47, 0.2);
+  border-radius: 10px;
+  padding: 0.68rem 0.75rem;
+  color: #10202f;
+  background: rgba(255, 255, 255, 0.92);
+  font: 400 0.9rem/1.35 'Sora', sans-serif;
+}
+
+.edit-name-form input.field-error {
+  border-color: #d92d20;
+  background: rgba(255, 240, 240, 0.95);
+  box-shadow: 0 0 0 3px rgba(217, 45, 32, 0.15);
+}
+
+.edit-name-note,
+.edit-name-message {
+  margin: 0;
+  font: 500 0.88rem/1.35 'IBM Plex Mono', monospace;
+}
+
+.edit-name-message.success {
+  color: #0f766e;
+}
+
+.edit-name-message.error {
+  color: #b42318;
+}
+
+.edit-name-actions {
+  margin-top: 0.35rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.7rem;
+}
+
+@media (max-width: 920px) {
+  .edit-name-top-card {
+    align-items: stretch;
+  }
+
+  .edit-name-actions {
+    flex-direction: column;
+  }
+}

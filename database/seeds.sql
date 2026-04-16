@@ -1,9 +1,11 @@
 USE vibecheck;
 
+DELETE FROM event_waitlist;
 DELETE FROM event_registrations;
 DELETE FROM events;
 DELETE FROM users;
 
+ALTER TABLE event_waitlist AUTO_INCREMENT = 1;
 ALTER TABLE event_registrations AUTO_INCREMENT = 1;
 ALTER TABLE events AUTO_INCREMENT = 1;
 ALTER TABLE users AUTO_INCREMENT = 1;
@@ -51,6 +53,8 @@ INSERT INTO events (
 INSERT INTO event_registrations (user_id, event_id, status) VALUES
     (1, 1, 'registered'),
     (2, 1, 'registered'),
-    (3, 1, 'waitlisted'),
     (1, 2, 'registered'),
     (3, 2, 'registered');
+
+INSERT INTO event_waitlist (user_id, event_id) VALUES
+    (3, 1);

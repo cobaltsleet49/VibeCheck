@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useAuth0 } from '@auth0/auth0-react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import ProfileMenu from '../components/ProfileMenu.jsx'
 import './ViewRegistrations.css'
 
 const API_BASE = import.meta.env.VITE_API_BASE ?? '/api'
@@ -7,6 +9,7 @@ const API_BASE = import.meta.env.VITE_API_BASE ?? '/api'
 function ViewRegistrations() {
   const navigate = useNavigate()
   const location = useLocation()
+  const { user, logout } = useAuth0()
   const { eventId } = useParams()
   const [event, setEvent] = useState(location.state?.event ?? null)
   const [registrations, setRegistrations] = useState([])
@@ -54,7 +57,7 @@ function ViewRegistrations() {
         setRegistrations(
           allRegistrations
             .filter((registration) => Number(registration.event_id) === Number(numericEventId))
-            .sort((first, second) => String(second.registration_time ?? '').localeCompare(String(first.registration_time ?? ''))),
+            .sort((first, second) => String(first.registration_time ?? '').localeCompare(String(second.registration_time ?? ''))),
         )
 
         if (!resolvedEvent) {
@@ -181,17 +184,27 @@ function ViewRegistrations() {
   return (
     <div className="view-registrations-page">
       <header className="view-registrations-nav" aria-label="View registrations navigation">
-        <button type="button" className="back-button" onClick={() => navigate('/my-events')} aria-label="Back to My Events">
-          ←
-        </button>
-        <div>
-          <p className="view-registrations-kicker">View Registrations</p>
-          <h1>{event?.title ?? 'Event Registrations'}</h1>
+        <div className="view-registrations-nav-left">
+          <button type="button" className="back-button" onClick={() => navigate('/my-events')} aria-label="Back to My Events">
+            ←
+          </button>
+          <div>
+            <p className="view-registrations-kicker">View Registrations</p>
+          </div>
+        </div>
+
+        <div className="view-registrations-nav-right">
+          <ProfileMenu
+            user={user}
+            onEditName={() => navigate('/edit-name')}
+            onLogout={() => logout({ logoutParams: { returnTo: window.location.origin } })}
+          />
         </div>
       </header>
 
       <section className="view-registrations-summary">
-        <h2>{registrationCountLabel}</h2>
+        <h2 className="view-registrations-event-title">{event?.title ?? 'Event Registrations'}</h2>
+        <p>{registrationCountLabel}</p>
       </section>
 
       <section className="view-registrations-content" aria-label="Registrants list">
@@ -239,6 +252,12 @@ function ViewRegistrations() {
                     <dt>Status</dt>
                     <dd>{registrationStatusLabel(registration.status)}</dd>
                   </div>
+                  {String(registration.status ?? '').toLowerCase().trim() === 'waitlisted' && Number(registration.waitlist_position) > 0 && (
+                    <div>
+                      <dt>Waitlist Position</dt>
+                      <dd>{Number(registration.waitlist_position)}</dd>
+                    </div>
+                  )}
                 </dl>
 
                 {isRsvpEvent() && String(registration.status ?? '').toLowerCase().trim() === 'pending' && (

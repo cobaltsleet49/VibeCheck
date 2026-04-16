@@ -88,6 +88,27 @@ class User
         return $stmt->fetch();
     }
 
+    public static function updateName(int $userId, string $name): array|false
+    {
+        $pdo = Database::connection();
+        $stmt = $pdo->prepare(
+            'UPDATE users
+             SET name = :name
+             WHERE user_id = :user_id'
+        );
+        $stmt->execute([
+            ':name' => $name,
+            ':user_id' => $userId,
+        ]);
+
+        if ($stmt->rowCount() === 0) {
+            $existing = self::find($userId);
+            return $existing === false ? false : $existing;
+        }
+
+        return self::find($userId);
+    }
+
     public static function delete(int $userId): bool
     {
         $pdo = Database::connection();

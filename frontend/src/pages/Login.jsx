@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { useAuth0 } from '@auth0/auth0-react'
 import '../App.css'
 
@@ -16,9 +15,6 @@ function Login() {
   const auth0ClientId = import.meta.env.VITE_AUTH0_CLIENT_ID
   const auth0Audience = import.meta.env.VITE_AUTH0_AUDIENCE
   const isAuthConfigured = Boolean(auth0Domain) && Boolean(auth0ClientId)
-  const userEmail = String(user?.email ?? '').toLowerCase()
-  const isEduEmail = userEmail.endsWith('.edu')
-  const isAllowedUser = !isAuthenticated || isEduEmail
   const auth0LoginOptions = {
     authorizationParams: {
       prompt: 'login',
@@ -26,12 +22,6 @@ function Login() {
       ...(auth0Audience ? { audience: auth0Audience } : {}),
     },
   }
-
-  useEffect(() => {
-    if (isAuthenticated && user && !isEduEmail) {
-      logout({ logoutParams: { returnTo: window.location.origin } })
-    }
-  }, [isAuthenticated, isEduEmail, logout, user])
 
   return (
     <div className="home-page">
@@ -45,9 +35,9 @@ function Login() {
       </section>
 
       <section className="login-panel" aria-label="Login">
-        <h2>{isAuthenticated && isAllowedUser ? 'You are signed in' : 'Welcome back'}</h2>
+        <h2>{isAuthenticated ? 'You are signed in' : 'Welcome back'}</h2>
         <p className="login-subtitle">
-          {isAuthenticated && isAllowedUser
+          {isAuthenticated
             ? 'Your session is active through Auth0.'
             : 'Continue with Auth0 Universal Login.'}
         </p>
@@ -64,13 +54,7 @@ function Login() {
           </p>
         )}
 
-        {isAuthenticated && !isEduEmail && (
-          <p className="login-message error" role="status">
-            Access restricted: please sign in with a .edu email address.
-          </p>
-        )}
-
-        {isAuthenticated && user && isEduEmail && (
+        {isAuthenticated && user && (
           <div className="user-card" role="status">
             {user.picture && <img src={user.picture} alt={user.name ?? 'Profile'} />}
             <div>
@@ -94,7 +78,7 @@ function Login() {
               type="button"
               onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}
             >
-              {isEduEmail ? 'Sign out' : 'Sign out and use .edu email'}
+              Sign out
             </button>
           )}
         </div>

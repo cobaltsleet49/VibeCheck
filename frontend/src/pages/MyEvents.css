@@ -20,6 +20,28 @@
   flex-wrap: wrap;
 }
 
+.my-events-page .events-nav-left .tab-button,
+.my-events-page .events-nav-left .back-button {
+  padding: 0.62rem 0.9rem;
+  font-size: 0.84rem;
+  border-radius: 10px;
+  line-height: 1;
+}
+
+.my-events-page .events-nav-right .secondary-action,
+.my-events-page .events-nav-right .create-event-button {
+  padding: 0.45rem 0.78rem;
+  font-size: 0.84rem;
+  border-radius: 9px;
+  line-height: 1;
+  letter-spacing: 0.01em;
+}
+
+.my-events-page .events-nav-left .back-button {
+  width: auto;
+  height: auto;
+}
+
 .tab-button.active {
   border-color: #0f766e;
   background: rgba(15, 118, 110, 0.12);

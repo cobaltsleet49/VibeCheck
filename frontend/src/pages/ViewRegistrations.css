@@ -11,6 +11,7 @@
 .view-registrations-nav {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 0.85rem;
   padding: 1rem 1.1rem;
   border: 1px solid rgba(16, 32, 47, 0.1);
@@ -19,14 +20,26 @@
   box-shadow: 0 12px 24px rgba(10, 28, 43, 0.06);
 }
 
-.view-registrations-kicker {
-  margin: 0 0 0.18rem;
-  color: #0f766e;
-  font: 700 0.76rem/1.2 'IBM Plex Mono', monospace;
-  text-transform: uppercase;
+.view-registrations-nav-left {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
 }
 
-.view-registrations-nav h1 {
+.view-registrations-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.view-registrations-kicker {
+  margin: 0;
+  color: #0f766e;
+  font: 700 0.95rem/1 'Sora', sans-serif;
+  letter-spacing: 0.02em;
+}
+
+.view-registrations-event-title {
   margin: 0;
   color: #10202f;
   font: 700 clamp(1.3rem, 2.2vw, 1.9rem)/1.1 'Sora', sans-serif;
@@ -225,6 +238,14 @@
 }
 
 @media (max-width: 700px) {
+  .view-registrations-nav {
+    align-items: stretch;
+  }
+
+  .view-registrations-nav-right {
+    justify-content: flex-start;
+  }
+
   .registration-card-header {
     flex-direction: column;
   }

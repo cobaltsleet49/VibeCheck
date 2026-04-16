@@ -26,6 +26,7 @@ function EventForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isLoadingEvent, setIsLoadingEvent] = useState(Boolean(eventId))
   const [message, setMessage] = useState({ type: '', text: '' })
+  const [fieldErrors, setFieldErrors] = useState({})
 
   const isEditing = Boolean(eventId)
 
@@ -117,36 +118,50 @@ function EventForm() {
   function onChange(event) {
     const { name, value } = event.target
     setForm((prev) => ({ ...prev, [name]: value }))
+    setFieldErrors((prev) => {
+      if (!prev[name]) {
+        return prev
+      }
+
+      const nextErrors = { ...prev }
+      delete nextErrors[name]
+      return nextErrors
+    })
   }
 
   function onReset() {
     setForm(isEditing ? originalForm : initialFormState)
     setMessage({ type: '', text: '' })
+    setFieldErrors({})
   }
 
   async function onSubmit(event) {
     event.preventDefault()
     setMessage({ type: '', text: '' })
 
-    const missingFields = []
-    if (!String(user?.email ?? '').trim()) missingFields.push('Email identity')
-    if (!form.title.trim()) missingFields.push('Title')
-    if (!form.description.trim()) missingFields.push('Description')
-    if (!form.start_time.trim()) missingFields.push('Start Time')
-    if (!form.end_time.trim()) missingFields.push('End Time')
-    if (!form.location.trim()) missingFields.push('Location')
-    if (!form.capacity.trim() || Number(form.capacity) <= 0) missingFields.push('Capacity')
-    if (!form.registration_type.trim()) missingFields.push('Access Level')
-    if (!form.event_type.trim()) missingFields.push('Event Type')
+    const nextFieldErrors = {}
+    if (!form.title.trim()) nextFieldErrors.title = 'Title is required.'
+    if (!form.description.trim()) nextFieldErrors.description = 'Description is required.'
+    if (!form.start_time.trim()) nextFieldErrors.start_time = 'Start time is required.'
+    if (!form.end_time.trim()) nextFieldErrors.end_time = 'End time is required.'
+    if (!form.location.trim()) nextFieldErrors.location = 'Location is required.'
+    if (!form.capacity.trim() || Number(form.capacity) <= 0) nextFieldErrors.capacity = 'Capacity must be greater than 0.'
+    if (!form.registration_type.trim()) nextFieldErrors.registration_type = 'Access level is required.'
+    if (!form.event_type.trim()) nextFieldErrors.event_type = 'Event type is required.'
 
-    if (missingFields.length > 0) {
-      setMessage({ type: 'error', text: 'Please complete all required fields before submitting.' })
+    if (Object.keys(nextFieldErrors).length > 0) {
+      setFieldErrors(nextFieldErrors)
+      setMessage({ type: 'error', text: 'Please complete the highlighted fields before submitting.' })
       return
     }
 
     const start = new Date(form.start_time)
     const end = new Date(form.end_time)
     if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()) || end <= start) {
+      setFieldErrors((prev) => ({
+        ...prev,
+        end_time: 'End time must be after start time.',
+      }))
       setMessage({
         type: 'error',
         text: 'End time must be after start time.',
@@ -193,6 +208,7 @@ function EventForm() {
       }
 
       setForm(initialFormState)
+      setFieldErrors({})
       navigate('/my-events', {
         state: { successMessage: isEditing ? 'Event updated successfully!' : 'Event created successfully!' },
       })
@@ -223,7 +239,11 @@ function EventForm() {
           onChange={onChange}
           required
           maxLength={255}
+          className={fieldErrors.title ? 'field-error' : ''}
+          aria-invalid={Boolean(fieldErrors.title)}
+          aria-describedby={fieldErrors.title ? 'title-error' : undefined}
         />
+        {fieldErrors.title && <p id="title-error" className="field-error-message">{fieldErrors.title}</p>}
 
         <label htmlFor="description">Description *</label>
         <textarea
@@ -233,7 +253,11 @@ function EventForm() {
           onChange={onChange}
           rows="4"
           required
+          className={fieldErrors.description ? 'field-error' : ''}
+          aria-invalid={Boolean(fieldErrors.description)}
+          aria-describedby={fieldErrors.description ? 'description-error' : undefined}
         />
+        {fieldErrors.description && <p id="description-error" className="field-error-message">{fieldErrors.description}</p>}
 
         <div className="event-form-grid">
           <div>
@@ -245,7 +269,11 @@ function EventForm() {
               value={form.start_time}
               onChange={onChange}
               required
+              className={fieldErrors.start_time ? 'field-error' : ''}
+              aria-invalid={Boolean(fieldErrors.start_time)}
+              aria-describedby={fieldErrors.start_time ? 'start_time-error' : undefined}
             />
+            {fieldErrors.start_time && <p id="start_time-error" className="field-error-message">{fieldErrors.start_time}</p>}
           </div>
           <div>
             <label htmlFor="end_time">End Time *</label>
@@ -256,7 +284,11 @@ function EventForm() {
               value={form.end_time}
               onChange={onChange}
               required
+              className={fieldErrors.end_time ? 'field-error' : ''}
+              aria-invalid={Boolean(fieldErrors.end_time)}
+              aria-describedby={fieldErrors.end_time ? 'end_time-error' : undefined}
             />
+            {fieldErrors.end_time && <p id="end_time-error" className="field-error-message">{fieldErrors.end_time}</p>}
           </div>
         </div>
 
@@ -271,7 +303,11 @@ function EventForm() {
               onChange={onChange}
               maxLength={255}
               required
+              className={fieldErrors.location ? 'field-error' : ''}
+              aria-invalid={Boolean(fieldErrors.location)}
+              aria-describedby={fieldErrors.location ? 'location-error' : undefined}
             />
+            {fieldErrors.location && <p id="location-error" className="field-error-message">{fieldErrors.location}</p>}
           </div>
           <div>
             <label htmlFor="capacity">Capacity *</label>
@@ -284,7 +320,11 @@ function EventForm() {
               value={form.capacity}
               onChange={onChange}
               required
+              className={fieldErrors.capacity ? 'field-error' : ''}
+              aria-invalid={Boolean(fieldErrors.capacity)}
+              aria-describedby={fieldErrors.capacity ? 'capacity-error' : undefined}
             />
+            {fieldErrors.capacity && <p id="capacity-error" className="field-error-message">{fieldErrors.capacity}</p>}
           </div>
         </div>
 
@@ -297,11 +337,15 @@ function EventForm() {
               value={form.registration_type}
               onChange={onChange}
               required
+              className={fieldErrors.registration_type ? 'field-error' : ''}
+              aria-invalid={Boolean(fieldErrors.registration_type)}
+              aria-describedby={fieldErrors.registration_type ? 'registration_type-error' : undefined}
             >
               <option value="">Select access level</option>
               <option value="Public">Public</option>
               <option value="RSVP">RSVP</option>
             </select>
+            {fieldErrors.registration_type && <p id="registration_type-error" className="field-error-message">{fieldErrors.registration_type}</p>}
           </div>
           <div>
             <label htmlFor="event_type">Event Type *</label>
@@ -311,6 +355,9 @@ function EventForm() {
               value={form.event_type}
               onChange={onChange}
               required
+              className={fieldErrors.event_type ? 'field-error' : ''}
+              aria-invalid={Boolean(fieldErrors.event_type)}
+              aria-describedby={fieldErrors.event_type ? 'event_type-error' : undefined}
             >
               <option value="">Select event type</option>
               <option value="Study Group">Study Group</option>
@@ -320,6 +367,7 @@ function EventForm() {
               <option value="Professional Development">Professional Development</option>
               <option value="Other">Other</option>
             </select>
+            {fieldErrors.event_type && <p id="event_type-error" className="field-error-message">{fieldErrors.event_type}</p>}
           </div>
         </div>
 

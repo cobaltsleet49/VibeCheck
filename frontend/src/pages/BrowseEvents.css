@@ -14,8 +14,15 @@
   gap: 0.65rem;
 }
 
+.browse-events-page .events-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
 .browse-events-page .brand {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   min-height: 38px;
 }
