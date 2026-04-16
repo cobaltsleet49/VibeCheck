@@ -1,13 +1,14 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useAuth0 } from '@auth0/auth0-react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import ProfileMenu from '../components/ProfileMenu.jsx'
 import '../App.css'
 import './MyEvents.css'
 
 function MyEvents() {
   const navigate = useNavigate()
   const location = useLocation()
-  const { user } = useAuth0()
+  const { user, logout } = useAuth0()
   const [activeTab, setActiveTab] = useState('created')
   const [successMessage, setSuccessMessage] = useState('')
   const [createdEvents, setCreatedEvents] = useState([])
@@ -368,6 +369,12 @@ function MyEvents() {
                   <dt>Type</dt>
                   <dd>{event?.event_type ?? 'N/A'}</dd>
                 </div>
+                {String(registration.status ?? '').toLowerCase().trim() === 'waitlisted' && Number(registration.waitlist_position) > 0 && (
+                  <div>
+                    <dt>Waitlist Position</dt>
+                    <dd>{Number(registration.waitlist_position)}</dd>
+                  </div>
+                )}
               </dl>
             </article>
           )
@@ -420,6 +427,12 @@ function MyEvents() {
           >
             Create Event
           </button>
+
+          <ProfileMenu
+            user={user}
+            onEditName={() => navigate('/edit-name')}
+            onLogout={() => logout({ logoutParams: { returnTo: window.location.origin } })}
+          />
         </div>
       </header>
 

@@ -145,4 +145,38 @@ class Event
 
         return $stmt->rowCount() > 0;
     }
+
+    public static function capacityFor(int $eventId): ?int
+    {
+        $pdo = Database::connection();
+        $stmt = $pdo->prepare(
+            'SELECT capacity
+             FROM events
+             WHERE event_id = :event_id
+             LIMIT 1'
+        );
+        $stmt->execute([':event_id' => $eventId]);
+
+        $row = $stmt->fetch();
+        if ($row === false || $row['capacity'] === null) {
+            return null;
+        }
+
+        return (int) $row['capacity'];
+    }
+
+    public static function activeRegistrationCount(int $eventId): int
+    {
+        $pdo = Database::connection();
+        $stmt = $pdo->prepare(
+            "SELECT COUNT(*) AS total
+             FROM event_registrations
+             WHERE event_id = :event_id
+               AND LOWER(status) IN ('registered', 'confirmed', 'approved')"
+        );
+        $stmt->execute([':event_id' => $eventId]);
+
+        $row = $stmt->fetch();
+        return (int) ($row['total'] ?? 0);
+    }
 }

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useAuth0 } from '@auth0/auth0-react'
 import { useNavigate } from 'react-router-dom'
+import ProfileMenu from '../components/ProfileMenu.jsx'
 import './BrowseEvents.css'
 
 const API_BASE = import.meta.env.VITE_API_BASE ?? '/api'
@@ -10,7 +11,7 @@ const MAX_RELIABLE_DISTANCE_MILES = 5758.9
 
 function BrowseEvents() {
   const navigate = useNavigate()
-  const { user } = useAuth0()
+  const { user, logout } = useAuth0()
   const [events, setEvents] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
@@ -347,9 +348,16 @@ function BrowseEvents() {
           <p className="brand">Browse Events</p>
         </div>
 
-        <button type="button" className="secondary-action" onClick={() => navigate('/my-events')}>
-          My Events
-        </button>
+        <div className="events-nav-right">
+          <button type="button" className="secondary-action" onClick={() => navigate('/my-events')}>
+            My Events
+          </button>
+          <ProfileMenu
+            user={user}
+            onEditName={() => navigate('/edit-name')}
+            onLogout={() => logout({ logoutParams: { returnTo: window.location.origin } })}
+          />
+        </div>
       </header>
 
       <section className="browse-filters" aria-label="Browse filters">

@@ -3,15 +3,13 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import BrowseEvents from './pages/BrowseEvents.jsx'
 import EventForm from './pages/EventForm.jsx'
 import Home from './pages/Home.jsx'
+import EditName from './pages/EditName.jsx'
 import Login from './pages/Login.jsx'
 import MyEvents from './pages/MyEvents.jsx'
 import ViewRegistrations from './pages/ViewRegistrations.jsx'
 
 function App() {
   const { user, isAuthenticated, isLoading, logout } = useAuth0()
-
-  const userEmail = String(user?.email ?? '').toLowerCase()
-  const isEduEmail = userEmail.endsWith('.edu')
 
   if (isLoading) {
     return (
@@ -21,7 +19,7 @@ function App() {
     )
   }
 
-  if (isAuthenticated && isEduEmail) {
+  if (isAuthenticated) {
     return (
       <BrowserRouter>
         <Routes>
@@ -35,6 +33,7 @@ function App() {
               />
             }
           />
+          <Route path="/edit-name" element={<EditName />} />
           <Route path="/my-events" element={<MyEvents />} />
           <Route path="/events/:eventId/registrations" element={<ViewRegistrations />} />
           <Route path="/browse-events" element={<BrowseEvents />} />

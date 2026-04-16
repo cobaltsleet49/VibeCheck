@@ -56,6 +56,20 @@
   font: 400 0.9rem/1.35 'Sora', sans-serif;
 }
 
+.event-form input.field-error,
+.event-form select.field-error,
+.event-form textarea.field-error {
+  border-color: #d92d20;
+  background: rgba(255, 240, 240, 0.95);
+  box-shadow: 0 0 0 3px rgba(217, 45, 32, 0.15);
+}
+
+.field-error-message {
+  margin: -0.2rem 0 0;
+  color: #b42318;
+  font: 500 0.78rem/1.3 'IBM Plex Mono', monospace;
+}
+
 .event-form textarea {
   resize: vertical;
   min-height: 96px;

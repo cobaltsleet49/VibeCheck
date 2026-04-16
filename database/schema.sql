@@ -54,3 +54,21 @@ CREATE TABLE IF NOT EXISTS event_registrations (
         FOREIGN KEY (event_id) REFERENCES events (event_id)
         ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS event_waitlist (
+    waitlist_id          INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    user_id              INT UNSIGNED NOT NULL,
+    event_id             INT UNSIGNED NOT NULL,
+    waitlist_time        TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    PRIMARY KEY (waitlist_id),
+    UNIQUE KEY uq_event_waitlist_user_event (user_id, event_id),
+    KEY idx_event_waitlist_event_id (event_id),
+
+    CONSTRAINT fk_event_waitlist_user
+        FOREIGN KEY (user_id) REFERENCES users (user_id)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_event_waitlist_event
+        FOREIGN KEY (event_id) REFERENCES events (event_id)
+        ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
