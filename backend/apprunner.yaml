@@ -1,0 +1,9 @@
+version: 1.0
+runtime: php81
+build:
+  commands:
+    - composer install
+run:
+  command: php -S 0.0.0.0:8080 -t public
+  network:
+    port: 8080
