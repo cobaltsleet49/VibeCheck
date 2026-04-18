@@ -4,7 +4,7 @@
 
 ## Website Link
 
-![(https://main.d3keonkca2xnce.amplifyapp.com/browse-events)](https://main.d3keonkca2xnce.amplifyapp.com)
+[Click Here](https://main.d3keonkca2xnce.amplifyapp.com)
 
 ## ERD
 
