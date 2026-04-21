@@ -1,3 +1,30 @@
+.shell-loading {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background:
+    radial-gradient(ellipse 700px 400px at 50% 30%, rgba(15, 118, 110, 0.12), transparent 60%),
+    radial-gradient(ellipse 600px 360px at 80% 90%, rgba(29, 78, 216, 0.1), transparent 55%),
+    linear-gradient(155deg, #e8f3f8 0%, #e6f7f4 50%, #eef4fb 100%);
+}
+
+.shell-loading p {
+  margin: 0;
+  padding: 1rem 1.35rem;
+  border-radius: 14px;
+  border: 1px solid rgba(15, 118, 110, 0.18);
+  background: rgba(255, 255, 255, 0.85);
+  color: #0f766e;
+  font: 600 0.95rem/1.4 'Sora', sans-serif;
+  box-shadow: 0 12px 28px rgba(12, 55, 70, 0.1);
+}
+
+.login-brand-logo {
+  margin: 0 0 1.25rem;
+}
+
 .login-panel {
   background: rgba(255, 255, 255, 0.88);
   border: 1px solid rgba(16, 32, 47, 0.12);

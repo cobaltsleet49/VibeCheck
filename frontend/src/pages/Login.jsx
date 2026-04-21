@@ -1,5 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react'
-import '../App.css'
+import VibeCheckLogo from '../components/VibeCheckLogo.jsx'
 
 function Login() {
   const {
@@ -26,7 +26,9 @@ function Login() {
   return (
     <div className="home-page">
       <section className="hero-panel">
-        <p className="eyebrow">VibeCheck</p>
+        <div className="login-brand-logo">
+          <VibeCheckLogo variant="hero" />
+        </div>
         <h1>Sign in and jump into your community events.</h1>
         <p className="hero-copy">
           One dashboard for campus meetups, workshops, and registrations.

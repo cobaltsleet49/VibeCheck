@@ -1,0 +1,17 @@
+.vibecheck-logo {
+  display: block;
+  height: auto;
+  object-fit: contain;
+}
+
+.vibecheck-logo--nav {
+  max-height: 34px;
+  width: auto;
+  max-width: min(200px, 52vw);
+}
+
+.vibecheck-logo--hero {
+  max-height: 56px;
+  width: auto;
+  max-width: min(300px, 88vw);
+}

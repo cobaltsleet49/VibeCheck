@@ -2,13 +2,14 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import '../App.css'
 import ProfileMenu from '../components/ProfileMenu.jsx'
+import VibeCheckLogo from '../components/VibeCheckLogo.jsx'
 import './Home.css'
 
 const API_BASE = import.meta.env.VITE_API_BASE ?? '/api'
 
 function Home({ user, onLogout }) {
   const navigate = useNavigate()
-  const [displayName, setDisplayName] = useState(user?.name ?? 'VibeCheck user')
+  const [displayName, setDisplayName] = useState(user?.name ?? 'Guest')
   const email = user?.email ?? ''
 
   useEffect(() => {
@@ -34,11 +35,11 @@ function Home({ user, onLogout }) {
         )
 
         if (isActive) {
-          setDisplayName(currentUser?.name ?? user?.name ?? 'VibeCheck user')
+          setDisplayName(currentUser?.name ?? user?.name ?? 'Guest')
         }
       } catch {
         if (isActive) {
-          setDisplayName(user?.name ?? 'VibeCheck user')
+          setDisplayName(user?.name ?? 'Guest')
         }
       }
     }
@@ -53,7 +54,9 @@ function Home({ user, onLogout }) {
   return (
     <div className="home-page dashboard-page">
       <header className="top-nav" aria-label="Primary navigation">
-        <p className="brand">VibeCheck</p>
+        <p className="brand">
+          <VibeCheckLogo variant="nav" />
+        </p>
         <nav className="nav-links">
           <button type="button" onClick={() => navigate('/my-events')}>My Events</button>
           <button type="button" className="primary-action" onClick={() => navigate('/browse-events')}>Browse Events</button>
