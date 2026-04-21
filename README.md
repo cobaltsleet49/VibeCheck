@@ -29,7 +29,7 @@ The second tab, “Events Registered”, displays all events you’ve attempted 
 - If an event says “Pending”, it’s an RSVP event that you haven’t been accepted to or denied from yet.
 - If an event says “Denied”, it’s an RSVP event you’ve been rejected from by the owner.
 - If an event says “Waitlisted”, more users have attempted to register than the event has capacity for. If other users cancel their registration for this event, you’ll move up in the waitlist, and if you move to waitlist position zero, you’ll be automatically registered for the event.
-Additionally, you may press the “Cancel” button on an event you’ve registered for to revoke your registration for it.
+Additionally, you may press the “Cancel” button on an event you’ve registered for to revoke your registration for it. Cancelled events will remain listed in your registered events section for bookkeeping purposes.
 
 Finally, in the “My Events” page, the “Create Event” option appears in the top bar. Clicking on this allows you to create an event by inputting a name, description, start date/time, end date/time, location, capacity, access level, and event type.
 
