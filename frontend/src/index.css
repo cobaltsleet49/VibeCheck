@@ -2,6 +2,18 @@
   box-sizing: border-box;
 }
 
+:root {
+  --vc-teal: #0f766e;
+  --vc-teal-soft: rgba(15, 118, 110, 0.12);
+  --vc-blue: #1d4ed8;
+  --vc-blue-soft: rgba(29, 78, 216, 0.1);
+  --vc-ink: #10202f;
+  --vc-muted: #5b7084;
+  --vc-page-tint-top: rgba(15, 118, 110, 0.1);
+  --vc-page-tint-mid: rgba(56, 189, 248, 0.08);
+  --vc-page-tint-bottom: rgba(29, 78, 216, 0.09);
+}
+
 html,
 body,
 #root {
@@ -11,7 +23,8 @@ body,
 body {
   margin: 0;
   background:
-    radial-gradient(1200px 600px at 0% 100%, rgba(16, 185, 129, 0.12), transparent 60%),
-    radial-gradient(1000px 520px at 100% 0%, rgba(56, 189, 248, 0.16), transparent 62%),
-    linear-gradient(145deg, #f6f9fc 0%, #ecf4fb 100%);
+    radial-gradient(1200px 600px at 0% 100%, rgba(16, 185, 129, 0.16), transparent 58%),
+    radial-gradient(1000px 520px at 100% 0%, rgba(56, 189, 248, 0.2), transparent 60%),
+    radial-gradient(800px 400px at 50% 50%, rgba(15, 118, 110, 0.06), transparent 65%),
+    linear-gradient(152deg, #e8f3f8 0%, #e6f7f4 38%, #eef4fb 100%);
 }

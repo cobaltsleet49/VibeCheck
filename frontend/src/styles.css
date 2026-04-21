@@ -66,16 +66,28 @@
   gap: 1rem;
   padding: 0.85rem 1rem;
   border: 1px solid rgba(16, 32, 47, 0.12);
+  border-left: 3px solid rgba(15, 118, 110, 0.4);
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.78);
-  box-shadow: 0 10px 20px rgba(10, 28, 43, 0.08);
+  box-shadow: 0 10px 22px rgba(10, 28, 43, 0.1);
+  background: linear-gradient(
+    118deg,
+    rgba(255, 255, 255, 0.94) 0%,
+    rgba(236, 253, 245, 0.72) 42%,
+    rgba(239, 246, 255, 0.85) 100%
+  );
 }
 
 .brand {
   margin: 0;
+  display: flex;
+  align-items: center;
   color: #0f766e;
   font: 700 0.95rem/1 'Sora', sans-serif;
   letter-spacing: 0.02em;
+}
+
+.brand .vibecheck-logo {
+  flex-shrink: 0;
 }
 
 .nav-links {
@@ -160,6 +172,19 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Layered tint so authenticated pages never feel like flat white */
+.browse-events-page,
+.my-events-page,
+.home-page.dashboard-page,
+.event-form-page,
+.edit-name-page,
+.view-registrations-page {
+  background:
+    radial-gradient(ellipse 920px 500px at 100% 0%, var(--vc-page-tint-top), transparent 58%),
+    radial-gradient(ellipse 720px 420px at 0% 100%, var(--vc-page-tint-bottom), transparent 52%),
+    radial-gradient(ellipse 640px 360px at 45% 35%, var(--vc-page-tint-mid), transparent 62%);
 }
 
 @media (max-width: 920px) {

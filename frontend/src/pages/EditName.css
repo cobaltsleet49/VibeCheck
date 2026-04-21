@@ -10,10 +10,15 @@
 
 .edit-name-top-card,
 .edit-name-form-card {
-  border: 1px solid rgba(16, 32, 47, 0.12);
+  border: 1px solid rgba(15, 118, 110, 0.12);
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.82);
-  box-shadow: 0 12px 24px rgba(10, 28, 43, 0.06);
+  background: linear-gradient(
+    165deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(224, 242, 241, 0.35) 45%,
+    rgba(238, 246, 255, 0.48) 100%
+  );
+  box-shadow: 0 14px 28px rgba(12, 55, 65, 0.08);
 }
 
 .edit-name-top-card {
@@ -22,6 +27,7 @@
   align-items: center;
   justify-content: flex-start;
   gap: 0.9rem;
+  border-left: 3px solid rgba(15, 118, 110, 0.42);
 }
 
 .edit-name-top-left {

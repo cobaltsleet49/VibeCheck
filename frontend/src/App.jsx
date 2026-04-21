@@ -1,5 +1,6 @@
 import { useAuth0 } from '@auth0/auth0-react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import './App.css'
 import BrowseEvents from './pages/BrowseEvents.jsx'
 import EventForm from './pages/EventForm.jsx'
 import Home from './pages/Home.jsx'

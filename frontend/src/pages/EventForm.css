@@ -9,10 +9,16 @@
 }
 
 .event-form-header {
-  border: 1px solid rgba(16, 32, 47, 0.12);
+  border: 1px solid rgba(15, 118, 110, 0.14);
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.78);
-  box-shadow: 0 10px 20px rgba(10, 28, 43, 0.08);
+  border-left: 3px solid rgba(15, 118, 110, 0.45);
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(236, 253, 245, 0.65) 50%,
+    rgba(239, 246, 255, 0.88) 100%
+  );
+  box-shadow: 0 12px 26px rgba(12, 55, 70, 0.09);
   padding: 1rem 1.1rem;
 }
 
@@ -29,10 +35,15 @@
 }
 
 .event-form {
-  border: 1px solid rgba(16, 32, 47, 0.12);
+  border: 1px solid rgba(15, 118, 110, 0.12);
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.86);
-  box-shadow: 0 12px 22px rgba(10, 28, 43, 0.08);
+  background: linear-gradient(
+    168deg,
+    rgba(255, 255, 255, 0.94) 0%,
+    rgba(240, 253, 250, 0.4) 40%,
+    rgba(238, 246, 255, 0.55) 100%
+  );
+  box-shadow: 0 14px 28px rgba(10, 40, 50, 0.08);
   padding: 1.15rem;
   display: flex;
   flex-direction: column;

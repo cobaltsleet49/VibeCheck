@@ -54,10 +54,15 @@
 }
 
 .events-panel {
-  border: 1px solid rgba(16, 32, 47, 0.1);
+  border: 1px solid rgba(15, 118, 110, 0.12);
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.76);
-  box-shadow: 0 12px 24px rgba(10, 28, 43, 0.06);
+  background: linear-gradient(
+    165deg,
+    rgba(255, 255, 255, 0.93) 0%,
+    rgba(224, 242, 241, 0.38) 48%,
+    rgba(237, 242, 255, 0.42) 100%
+  );
+  box-shadow: 0 14px 28px rgba(12, 60, 70, 0.08);
   padding: 1.2rem;
 }
 
@@ -75,7 +80,11 @@
 
 .events-empty {
   margin: 0.75rem 0 0;
-  color: #5b7084;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  border: 1px dashed rgba(15, 118, 110, 0.18);
+  background: rgba(240, 253, 250, 0.45);
+  color: #456177;
   font: 400 0.95rem/1.6 'Sora', sans-serif;
 }
 
@@ -86,11 +95,16 @@
 }
 
 .event-card {
-  border: 1px solid rgba(16, 32, 47, 0.1);
+  border: 1px solid rgba(15, 118, 110, 0.14);
   border-radius: 14px;
   padding: 1rem 1.05rem;
-  background: rgba(255, 255, 255, 0.88);
-  box-shadow: 0 8px 18px rgba(10, 28, 43, 0.06);
+  background: linear-gradient(
+    165deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(224, 242, 241, 0.35) 55%,
+    rgba(238, 246, 255, 0.42) 100%
+  );
+  box-shadow: 0 8px 20px rgba(12, 55, 65, 0.08);
 }
 
 .event-card-header {

@@ -1,3 +1,5 @@
+@import './MyEvents.css';
+
 .browse-events-page {
   min-height: 100vh;
   max-width: 1160px;
@@ -28,10 +30,15 @@
 }
 
 .browse-filters {
-  border: 1px solid rgba(16, 32, 47, 0.1);
+  border: 1px solid rgba(15, 118, 110, 0.14);
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.82);
-  box-shadow: 0 12px 24px rgba(10, 28, 43, 0.06);
+  background: linear-gradient(
+    152deg,
+    rgba(255, 255, 255, 0.92) 0%,
+    rgba(224, 242, 241, 0.42) 45%,
+    rgba(232, 242, 255, 0.5) 100%
+  );
+  box-shadow: 0 12px 28px rgba(15, 90, 100, 0.09);
   padding: 1rem;
   display: grid;
   grid-template-columns: 1.4fr 0.7fr;
@@ -85,6 +92,29 @@
 
 .browse-results {
   margin-top: 0.2rem;
+}
+
+.browse-events-page .events-empty {
+  margin: 0.5rem 0 0;
+  padding: 1rem 1.1rem;
+  border-radius: 14px;
+  border: 1px dashed rgba(15, 118, 110, 0.2);
+  background: rgba(240, 253, 250, 0.5);
+  color: #37556f;
+}
+
+.browse-events-page .events-list {
+  margin-top: 0.75rem;
+}
+
+.browse-events-page .event-card {
+  border-color: rgba(15, 118, 110, 0.14);
+  background: linear-gradient(
+    165deg,
+    rgba(255, 255, 255, 0.96) 0%,
+    rgba(224, 242, 241, 0.35) 55%,
+    rgba(238, 246, 255, 0.45) 100%
+  );
 }
 
 .events-success-message {
