@@ -9,10 +9,9 @@
 ## User Manual
 
 ### Logging In
-To use VibeCheck, a user must be logged in with an account. To log in, the user must click the “Sign in with Auth0” on the initial splash page. This will pull up the login page, which has two main options:
-- If you’d like to create an account using an email and password, you may do so by entering them into the “Email address” and “Password” text boxes and pressing “Continue”.
-- If you’d like to use Google OAuth to log in with your Google account, you may click “Continue with Google” and proceed from there.
-Logging in will bring you to VibeCheck’s home page, which displays your name and email.
+To use VibeCheck, a user must be logged in with an account. To log in, the user must click the “Sign in with Auth0” on the initial splash page. This will pull up the login page, which has two main options. The preferred, easier way to create an account and login is highlighted below:
+- If you’d like to create an account using an email and password, you may do so by entering them into the “Email address” and “Password” text boxes and pressing “Continue”. Note that if you take this route, you will have to check your email for a verification link sent by Auth0. Once you click the verification link, now you may login to your account. If you don't want to verify through email, choose the option below.
+- **Recommended**: If you’d like to use Google OAuth to log in with your Google account, you may click “Continue with Google” and proceed from there. Logging in will bring you to VibeCheck’s home page, which displays your name and email. This option avoids the verification email, as the verification has been outsourced to Google (which in turn is redirected to your learning institution). 
 
 ### Browsing Events
 To browse events, you can click the “Browse Events” button in the top bar. This brings you to the event browsing page, which displays every event, besides the ones you yourself may have made. Events list their name, description, date, time, location, type, distance away from you, and public/RSVP status. If you see an event you’d like to attend, you can click the “Sign Up” button across from its name. If the event is public, you’ll instantly be registered for the event. If it’s an RSVP event, a request to register will be sent to the event’s creator, which can be either accepted or declined. Additionally, while browsing events, you can use the filters below the top bar to find events meeting particular criteria. These include:
